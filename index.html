@@ -14,10 +14,23 @@
         background-color: pink;
         margin: 0;
         overflow: hidden;
+        font-family: Arial, sans-serif;
       }
       canvas {
         position: absolute;
-        cursor: pointer; /* Tambahkan cursor pointer untuk klik */
+      }
+      /* Notifikasi */
+      #notif {
+        position: absolute;
+        top: 20px;
+        background-color: white;
+        padding: 10px 15px;
+        border-radius: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: red;
+        opacity: 0;
+        transition: opacity 1s;
       }
       /* Modal */
       .modal {
@@ -60,6 +73,7 @@
   </head>
   <body>
     <canvas id="canvas"></canvas>
+    <div id="notif">Klik hatinya ya sayang ❤️</div>
 
     <!-- Modal -->
     <div id="modal" class="modal">
@@ -75,9 +89,9 @@
       const modalText = document.getElementById("modal-text");
       const modalImg = document.getElementById("modal-img");
       const nextBtn = document.getElementById("next-btn");
+      const notif = document.getElementById("notif");
 
       let step = 0;
-
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
 
@@ -163,6 +177,8 @@
         }
         ctx.fill();
 
+        // Menampilkan notifikasi setelah animasi selesai
+        notif.style.opacity = 1;
         animationComplete = true;
       }
 
@@ -171,7 +187,6 @@
       assignHeartTargets();
       animate();
 
-      // Tambahkan event listener agar hati bisa diklik
       canvas.addEventListener("click", () => {
         if (animationComplete) {
           modal.style.display = "block";
@@ -183,7 +198,7 @@
 
         if (step === 1) {
           modalText.innerText =
-            "Terima Kasih ya sudah menjadi penyemangatku tiap hari ❤️ dan selalu ngingetin meskipun kadang nyebelin hehee ❤️, tapi dibalik itu aku bakal ngomong sekali lagi .....  ";
+            "Terima Kasih ya sudah menjadi penyemangatku tiap hari ❤️ dan selalu ngingetin meskipun kadang nyebelin hehee ❤️, tapi dibalik itu aku bakal ngomong sekali lagi .....";
           modalImg.src = "foto2.jpg";
         } else if (step === 2) {
           modalText.innerText =
