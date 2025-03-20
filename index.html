@@ -17,22 +17,7 @@
       }
       canvas {
         position: absolute;
-      }
-      #button {
-        margin-top: 20px;
-        padding: 10px 20px;
-        font-size: 18px;
-        font-weight: bold;
-        color: black;
-        background-color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        opacity: 0;
-        transition: opacity 1s;
-      }
-      #button:hover {
-        background-color: lightgray;
+        cursor: pointer; /* Tambahkan cursor pointer untuk klik */
       }
       /* Modal */
       .modal {
@@ -75,7 +60,6 @@
   </head>
   <body>
     <canvas id="canvas"></canvas>
-    <button id="button">Tekan Aku</button>
 
     <!-- Modal -->
     <div id="modal" class="modal">
@@ -87,7 +71,6 @@
     <script>
       const canvas = document.getElementById("canvas");
       const ctx = canvas.getContext("2d");
-      const button = document.getElementById("button");
       const modal = document.getElementById("modal");
       const modalText = document.getElementById("modal-text");
       const modalImg = document.getElementById("modal-img");
@@ -167,7 +150,7 @@
         } else {
           setTimeout(() => {
             fillHeart();
-          }, 1000);
+          }, 3000);
         }
       }
 
@@ -180,7 +163,6 @@
         }
         ctx.fill();
 
-        button.style.opacity = 1;
         animationComplete = true;
       }
 
@@ -189,7 +171,8 @@
       assignHeartTargets();
       animate();
 
-      button.addEventListener("click", () => {
+      // Tambahkan event listener agar hati bisa diklik
+      canvas.addEventListener("click", () => {
         if (animationComplete) {
           modal.style.display = "block";
         }
