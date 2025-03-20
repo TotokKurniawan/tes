@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Surprise Love ❤️</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: pink;
+        margin: 0;
+        overflow: hidden;
+      }
+      canvas {
+        position: absolute;
+      }
+      #button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: black;
+        background-color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 1s;
+      }
+      #button:hover {
+        background-color: lightgray;
+      }
+      /* Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 320px;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+      .modal img {
+        width: 100%;
+        border-radius: 10px;
+        margin-bottom: 10px;
+      }
+      .modal p {
+        font-size: 18px;
+        font-weight: bold;
+        color: black;
+      }
+      .modal button {
+        margin-top: 10px;
+        padding: 8px 15px;
+        font-size: 16px;
+        color: white;
+        background-color: red;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .modal button:hover {
+        background-color: darkred;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <button id="button">Tekan Aku</button>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+      <img id="modal-img" src="foto.jpg" alt="Foto 1" />
+      <p id="modal-text">Untuk bidadariku, Khoirunnisa Hibaitillah ❤️</p>
+      <button id="next-btn">Next</button>
+    </div>
+
+    <script>
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      const button = document.getElementById("button");
+      const modal = document.getElementById("modal");
+      const modalText = document.getElementById("modal-text");
+      const modalImg = document.getElementById("modal-img");
+      const nextBtn = document.getElementById("next-btn");
+
+      let step = 0;
+
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const heartPoints = [];
+      const totalParticles = 500;
+      let animationComplete = false;
+
+      function generateHeartPoints() {
+        for (let t = 0; t < Math.PI * 2; t += 0.05) {
+          let x = 16 * Math.pow(Math.sin(t), 3);
+          let y = -(
+            13 * Math.cos(t) -
+            5 * Math.cos(2 * t) -
+            2 * Math.cos(3 * t) -
+            Math.cos(4 * t)
+          );
+
+          heartPoints.push({
+            x: x * 20 + canvas.width / 2,
+            y: y * 20 + canvas.height / 2 - 50,
+          });
+        }
+      }
+
+      function createParticles() {
+        for (let i = 0; i < totalParticles; i++) {
+          particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            targetX: 0,
+            targetY: 0,
+            speed: Math.random() * 0.05 + 0.02,
+          });
+        }
+      }
+
+      function assignHeartTargets() {
+        particles.forEach((p, i) => {
+          if (heartPoints[i]) {
+            p.targetX = heartPoints[i].x;
+            p.targetY = heartPoints[i].y;
+          }
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let complete = true;
+
+        particles.forEach((p) => {
+          p.x += (p.targetX - p.x) * p.speed;
+          p.y += (p.targetY - p.y) * p.speed;
+
+          if (
+            Math.abs(p.x - p.targetX) > 0.5 ||
+            Math.abs(p.y - p.targetY) > 0.5
+          ) {
+            complete = false;
+          }
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+          ctx.fillStyle = "red";
+          ctx.fill();
+        });
+
+        if (!complete) {
+          requestAnimationFrame(animate);
+        } else {
+          setTimeout(() => {
+            fillHeart();
+          }, 1000);
+        }
+      }
+
+      function fillHeart() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "red";
+        ctx.beginPath();
+        for (let i = 0; i < heartPoints.length; i++) {
+          ctx.lineTo(heartPoints[i].x, heartPoints[i].y);
+        }
+        ctx.fill();
+
+        button.style.opacity = 1;
+        animationComplete = true;
+      }
+
+      generateHeartPoints();
+      createParticles();
+      assignHeartTargets();
+      animate();
+
+      button.addEventListener("click", () => {
+        if (animationComplete) {
+          modal.style.display = "block";
+        }
+      });
+
+      nextBtn.addEventListener("click", () => {
+        step++;
+
+        if (step === 1) {
+          modalText.innerText =
+            "Terima Kasih ya sudah menjadi penyemangatku tiap hari ❤️ dan selalu ngingetin meskipun kadang nyebelin hehee ❤️, tapi dibalik itu aku bakal ngomong sekali lagi .....  ";
+          modalImg.src = "foto2.jpg";
+        } else if (step === 2) {
+          modalText.innerText =
+            "Terima kasih banyak cintaa karena sudah menjadi alasanku tersenyum setiap hari, I love you sayangku ❤️❤️❤️";
+          modalImg.src = "foto3.jpg";
+          nextBtn.innerText = "Tutup";
+        } else {
+          modal.style.display = "none";
+          step = 0;
+        }
+      });
+    </script>
+  </body>
+</html>
